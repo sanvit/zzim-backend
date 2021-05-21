@@ -35,6 +35,7 @@ def parser(url):
         shipping = 0
     else:
         shipping = int(shipping)
+    image_url = soup.find('meta', {'property': 'og:image'}).get('content')
     # 모델에 저장
     new_item = item()
     new_item.name = name
@@ -43,4 +44,5 @@ def parser(url):
     new_item.mall = shoppingMall.objects.get(slug='auction')
     new_item.url = url
     new_item.item_no = itemno
+    new_item.image_url = image_url
     new_item.save()

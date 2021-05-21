@@ -6,14 +6,14 @@ from bs4 import BeautifulSoup
 
 def parser(url):
     itemno = ""
-    if parse_qs(urlparse(url)).get('itemno'):
-        itemno = parse_qs(urlparse(url)).get('itemno')
-    elif parse_qs(urlparse(url)).get('itemNo'):
-        itemno = parse_qs(urlparse(url)).get('itemNo')
+    if parse_qs(urlparse(url).query).get('itemno'):
+        itemno = parse_qs(urlparse(url).query).get('itemno')
+    elif parse_qs(urlparse(url).query).get('itemNo'):
+        itemno = parse_qs(urlparse(url).query).get('itemNo')
     else:
-        itemno = parse_qs(urlparse(url)).get('ItemNo')
+        itemno = parse_qs(urlparse(url).query).get('ItemNo')
 
-    url = f"http://itempage3.auction.co.kr/DetailView.aspx?itemno={itemno}"
+    url = f"http://itempage3.auction.co.kr/DetailView.aspx?itemno={itemno[0]}"
     request = requests.get(url)
     soup = BeautifulSoup(request.text, 'html.parser')
     name = soup.find('h1', {'class': 'itemtit'}).text

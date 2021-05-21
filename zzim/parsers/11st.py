@@ -4,18 +4,8 @@ from bs4 import BeautifulSoup
 from zzim.models import item, shoppingMall
 
 def parser(url):
-    prdNo = ""
-    if parse_qs(urlparse(url).query).get('prdNo'):
-        prdNo = parse_qs(urlparse(url).query).get('prdNo')
-    elif parse_qs(urlparse(url).query).get('prdNo'):
-        prdNo = parse_qs(urlparse(url).query).get('prdNo')
-    else:
-        prdNo = parse_qs(urlparse(url)).get('prdNo')
-    prd=""
-    for c in prdNo:
-        if c.isdigit():
-            prd = prd + c
-    pcurl = f"http://www.11st.co.kr/products/{prd}"
+    prdNo = parse_qs(urlparse(url).query).get('prdNo')[0]
+    pcurl = f"http://www.11st.co.kr/products/{prdNo}"
     print (url)
     request = requests.get(pcurl)
     soup = BeautifulSoup(request.text, 'html.parser')

@@ -12,6 +12,7 @@ class item(models.Model):
     url = models.URLField(null=False, blank=False)
     item_no = models.CharField(null=False, blank=False)
     date_added = models.DateTimeField(auto_now_add=True)
+    image_url = models.URLField(null=False, blank=False)
     is_purchased = models.BooleanField(default=False, null=False, blank=False)
     is_shared = models.BooleanField(default=False, null=False, blank=False)
 

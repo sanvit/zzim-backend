@@ -18,5 +18,6 @@ class item(models.Model):
 class shoppingMall(models.Model):
     url = models.URLField(null=False, blank=False)
     name = models.CharField(max_length=100, null=False, blank=False)
+    slug = models.CharField(max_length=100, null=False, blank=False)
     icon = models.URLField(null=False, blank=False)
     logo = models.URLField(null=False, blank=False)

@@ -37,10 +37,10 @@ def parser(url):
         shipping = int(shipping)
     # 모델에 저장
     new_item = item()
-    item.name = name
-    item.price = price
-    item.shipping = shipping
-    item.mall = shoppingMall.objects.get(slug='auction')
-    item.url = url
-    item.item_no = itemno
-    item.save()
+    new_item.name = name
+    new_item.price = price
+    new_item.shipping = shipping
+    new_item.mall = shoppingMall.objects.get(slug='auction')
+    new_item.url = url
+    new_item.item_no = itemno
+    new_item.save()

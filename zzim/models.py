@@ -10,6 +10,7 @@ class item(models.Model):
     shipping = models.PositiveIntegerField(null=False, blank=False, default=0)
     mall = models.ForeignKey("shoppingMall", on_delete=models.SET_NULL, null=True)
     url = models.URLField(null=False, blank=False)
+    item_no = models.CharField(null=False, blank=False)
     date_added = models.DateTimeField(auto_now_add=True)
     is_purchased = models.BooleanField(default=False, null=False, blank=False)
     is_shared = models.BooleanField(default=False, null=False, blank=False)

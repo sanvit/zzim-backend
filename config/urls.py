@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import zzim.views as zzim
+import user.views as user
 
 
 urlpatterns = [
@@ -27,4 +28,7 @@ urlpatterns = [
     path('item/<uuid:id>/purchased', zzim.setPurchasedItem),
     path('item/<uuid:id>/delete', zzim.deleteItem),
     path('item/add', zzim.addItem),
+    path('user/signup', user.join),
+    path('user/signin', user.login),
+    path('user/signout', user.logout),
 ]

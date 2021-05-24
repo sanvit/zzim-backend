@@ -1,11 +1,10 @@
+from django.http.response import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
-from .parsers import *
 from .models import *
-from user.models import User
 from urllib.parse import urlparse
-# Create your views here.
+#from parsers import *
 
+# Create your views here.
 
 def listItem(req):
     user = req.user

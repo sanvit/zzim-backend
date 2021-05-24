@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 import zzim.views as zzim
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user', zzim.listItem),

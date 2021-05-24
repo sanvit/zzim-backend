@@ -19,11 +19,11 @@ import zzim.views as zzim
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-#    path('user', zzim.listItem),
-#    path('user/<str:id>', zzim.viewOtherUserItem),
-#    path('item/<uuid:id>', zzim.viewItem),
-#    path('item/<uuid:id>/edit', zzim.editItem),
-#    path('item/<uuid:id>/purchased', zzim.setPurchasedItem),
-#    path('item/<uuid:id>/delete', zzim.deleteItem),
-#    path('item/add', zzim.addItem),
+    path('user', zzim.listItem),
+    path('user/<str:id>', zzim.viewOtherUserItem),
+    path('item/<uuid:id>', zzim.viewItem),
+    path('item/<uuid:id>/edit', zzim.editItem),
+    path('item/<uuid:id>/purchased', zzim.setPurchasedItem),
+    path('item/<uuid:id>/delete', zzim.deleteItem),
+    path('item/add', zzim.addItem),
 ]

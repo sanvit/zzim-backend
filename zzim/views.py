@@ -9,13 +9,23 @@ from urllib.parse import urlparse
 
 def listItem(req):
     user = req.user
-    items = user.item.objects.all()
+    items = user.item_set.all()
+    item_list = []
+    for i in items:
+        item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
+                     'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
+                     'createdDate': i.date_added, 'url': i.url}
+        item_list.append(item_json)
+    return JsonResponse({"status": "SUCCESS", "data": item_list})
 
 
 def viewItem(req, id):
     item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user or req.user.is_public:
-        return JsonResponse(item_object, safe=False)
+        return JsonResponse(
+            {'image': item_object.image_url, 'name': item_object.name, 'price': item_object.price,
+             'shippingPrice': item_object.shipping, 'shoppingMallName': item_object.mall.name,
+             'logoImage': item_object.mall.logo, 'createdDate': item_object.date_added, 'url': item_object.url})
     return JsonResponse({"status": "FAILED", "message": "사용자 정보가 일치하지 않습니다."}, status=403)
 
 
@@ -28,7 +38,9 @@ def editItem(req, id):
             item_object.shipping = req.post['shipping']
             item_object.save()
             return JsonResponse({"status": "SUCCESS", "message": "성공적으로 수정되었습니다."})
-        return JsonResponse(item_object, safe=False)
+        return JsonResponse({'image': item_object.image_url, 'name': item_object.name, 'price': item_object.price,
+                             'shippingPrice': item_object.shipping, 'logoImage': item_object.mall.logo,
+                             'createdDate': item_object.date_added, 'url': item_object.url})
     return JsonResponse({"status": "FAILED", "message": "사용자 정보가 일치하지 않습니다."}, status=403)
 
 
@@ -68,6 +80,14 @@ def addItem(req):
 
 def viewOtherUserItem(req, id):
     user = get_object_or_404(User, username=id)
-    if user.is_public or req.user == user:
-        items = user.item.objects.all()
-    return JsonResponse({"status": "FAILED", "message": "비공개 프로필입니다."}, status=401)
+    print('#')
+    if user.is_public:
+        items = user.item_set.all()
+        item_list = []
+        for i in items:
+            item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
+                         'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
+                         'createdDate': i.date_added, 'url': i.url}
+            item_list.append(item_json)
+        return JsonResponse({"status": "SUCCESS", "nickname": user.nickname, "data": item_list})
+    return JsonResponse({"status": "FAILED", "message": "비공개 프로필입니다."}, status=403)

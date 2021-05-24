@@ -34,7 +34,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, null=False, blank=False, auto_created=True)
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, null=False,
+                            blank=False, auto_created=True, editable=False)
     username = models.CharField(max_length=64, unique=True)
     nickname = models.CharField(max_length=64, null=False, blank=False)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -44,7 +45,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_public = models.BooleanField(default=False)
 
-    @property
     def __str__(self):
         return self.username
 

@@ -5,7 +5,7 @@ from user.models import User
 
 
 class item(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, blank=False, null=False)
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, blank=False, null=False, editable=False)
     name = models.CharField(max_length=100, null=False, blank=False)
     price = models.PositiveIntegerField(null=False, blank=False, default=0)
     shipping = models.PositiveIntegerField(null=False, blank=False, default=0)
@@ -18,6 +18,9 @@ class item(models.Model):
     is_shared = models.BooleanField(default=False, null=False, blank=False)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.user.username} {self.name}"
+
 
 class shoppingMall(models.Model):
     url = models.URLField(null=False, blank=False)
@@ -25,3 +28,6 @@ class shoppingMall(models.Model):
     slug = models.CharField(max_length=100, null=False, blank=False)
     icon = models.URLField(null=False, blank=False)
     logo = models.URLField(null=False, blank=False)
+
+    def __str__(self):
+        return self.name

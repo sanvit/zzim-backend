@@ -2,11 +2,9 @@ from django.http.response import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from .models import *
 from urllib.parse import urlparse
-<<<<<<< HEAD
 #from parsers import *
-=======
-# Create your views here.
 
+# Create your views here.
 
 def listItem(req):
     user = req.user
@@ -43,46 +41,38 @@ def editItem(req, id):
                              'shippingPrice': item_object.shipping, 'logoImage': item_object.mall.logo,
                              'createdDate': item_object.date_added, 'url': item_object.url})
     return JsonResponse({"status": "FAILED", "message": "사용자 정보가 일치하지 않습니다."}, status=403)
->>>>>>> 8e7e57a115a55a4af1619c3530a73d0751e0940a
 
-# Create your views here.
 
-def setPurchaseItem(request, id):
-    item_object = get_object_or_404(item, pk='id')
-    if request.user == item_object.user:
+def setPurchasedItem(req, id):
+    item_object = get_object_or_404(item, pk=id)
+    if req.user == item_object.user:
         item_object.is_purchased == True
-        return JsonResponse({'status':'success'})
-    return JsonResponse({'status':'fail'})
+        item_object.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'fail'}, status=403)
 
-def deleteItem(request, id):
+
+def deleteItem(req, id):
     item_object = get_object_or_404(item, pk='id')
-    if request.user == item_object.user:
+    if req.user == item_object.user:
         item_object.delete()
-        return JsonResponse({'status':'success'})
-    return JsonResponse({'status':'fail'})
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'fail'}, status=403)
 
-def shareItem(request,id):
-    item_object = get_object_or_404(item,pk='id')
-    if request.user == item_object.user:
-        item_object.is_shared =True
-        return JsonResponse({'status':'success'})
-    return JsonResponse({'status':'fail'})
 
-def addItem(request):
-    if request.method == "POST":
-        url = request.POST['url']
+def addItem(req):
+    if req.method == "POST":
+        url = req.POST['url']
         parsed_url = urlparse(url)
-        if "gmarket" in urlparse(url).netloc:
+        domain = parsed_url.netloc
+        if "gmarket" in domain:
             item_object = gmarket.parser(url)
-        # elif "11st" in urlparse(url).netloc:
-        #     item_object = 11st.parser(url)
-        elif "naver" in urlparse(url).netloc:
+#        elif "11st" in domain:
+#            item_object = 11st.parser(url)
+        elif "naver" in domain:
             item_object = naver.parser(url)
-        elif "auction" in urlparse(url).netloc:
+        elif "auction" in domain:
             item_object = auction.parser(url)
-<<<<<<< HEAD
-        
-=======
         else:
             return JsonResponse({'status': 'FAILED', 'message': '현재 지원하지 않는 쇼핑몰입니다.'}, status=400)
 
@@ -100,4 +90,3 @@ def viewOtherUserItem(req, id):
             item_list.append(item_json)
         return JsonResponse({"status": "SUCCESS", "nickname": user.nickname, "data": item_list})
     return JsonResponse({"status": "FAILED", "message": "비공개 프로필입니다."}, status=403)
->>>>>>> 8e7e57a115a55a4af1619c3530a73d0751e0940a

@@ -45,10 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_public = models.BooleanField(default=False)
 
-<<<<<<< HEAD
     
-=======
->>>>>>> 8e7e57a115a55a4af1619c3530a73d0751e0940a
     def __str__(self):
         return self.username
 

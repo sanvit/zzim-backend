@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from user.models import User
 # Create your models here.
 
 
@@ -10,11 +11,12 @@ class item(models.Model):
     shipping = models.PositiveIntegerField(null=False, blank=False, default=0)
     mall = models.ForeignKey("shoppingMall", on_delete=models.SET_NULL, null=True)
     url = models.URLField(null=False, blank=False)
-    item_no = models.CharField(null=True, blank=True)
+    item_no = models.CharField(max_length=100, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     image_url = models.URLField(null=True, blank=True)
     is_purchased = models.BooleanField(default=False, null=False, blank=False)
     is_shared = models.BooleanField(default=False, null=False, blank=False)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
 
 class shoppingMall(models.Model):

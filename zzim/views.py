@@ -14,18 +14,19 @@ def listItem(req):
     for i in items:
         item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
                      'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
-                     'createdDate': i.date_added, 'url': i.url}
+                     'createdDate': i.date_added, 'url': i.url, 'purchased': i.is_purchased}
         item_list.append(item_json)
     return JsonResponse({"status": "SUCCESS", "data": item_list})
 
 
 def viewItem(req, id):
     item_object = get_object_or_404(item, pk=id)
-    if req.user == item_object.user or req.user.is_public:
+    if req.user == item_object.user or item_object.user.is_public:
         return JsonResponse(
             {'image': item_object.image_url, 'name': item_object.name, 'price': item_object.price,
              'shippingPrice': item_object.shipping, 'shoppingMallName': item_object.mall.name,
-             'logoImage': item_object.mall.logo, 'createdDate': item_object.date_added, 'url': item_object.url})
+             'logoImage': item_object.mall.logo, 'createdDate': item_object.date_added, 'url': item_object.url,
+             'purchased': item_object.is_purchased})
     return JsonResponse({"status": "FAILED", "message": "사용자 정보가 일치하지 않습니다."}, status=403)
 
 
@@ -49,16 +50,16 @@ def setPurchasedItem(req, id):
     if req.user == item_object.user:
         item_object.is_purchased == True
         item_object.save()
-        return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'fail'}, status=403)
+        return JsonResponse({'status': 'SUCCESS'})
+    return JsonResponse({'status': 'FAILED'}, status=403)
 
 
 def deleteItem(req, id):
-    item_object = get_object_or_404(item, pk='id')
+    item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user:
         item_object.delete()
-        return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'fail'}, status=403)
+        return JsonResponse({'status': 'SUCCESS'})
+    return JsonResponse({'status': 'FAILED'}, status=403)
 
 
 def addItem(req):

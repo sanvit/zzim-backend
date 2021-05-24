@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, nickname, username, password):
-        user = self.model(nickname=nickname, username=username, date_joined=timezone.now)
+        user = self.model(nickname=nickname, username=username)
         user.set_password(password)
         user.is_superuser = True
         user.is_admin = True
@@ -42,10 +42,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    is_public = models.BooleanField(default=False)
 
     @property
     def __str__(self):
         return self.username
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["username", "nickname"]
+    REQUIRED_FIELDS = ["nickname"]

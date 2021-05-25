@@ -23,7 +23,10 @@ def parser(url):
         price = 0
     else:
         price = int(price)
-    shipping_str = soup.find('div', {'class': 'delivery'}).find('dt').text
+    shipping_str = soup.find('div',{'class':'delivery'})
+    if(shipping_str==None):
+      shipping_str = soup.find('div',{'class':'delivery_abroad'})
+    shipping_str = shipping_str.find('dt').text
     shipping = ""
     for c in shipping_str:
         if c.isdigit():
@@ -36,5 +39,12 @@ def parser(url):
     image_url = soup.find('meta', {'property': 'og:image'}).get('content')
 
     # 모델에 저장
-  
+    new_item = item()
+    new_item.name = name
+    new_item.price = price
+    new_item.shipping = shipping
+    new_item.mall = shoppingMall.objects.get(slug='gmarket')
+    new_item.url = url
+    new_item.image_url = image_url
+    new_item.save()
     return 

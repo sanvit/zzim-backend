@@ -3,9 +3,12 @@ from django.contrib.auth import authenticate
 from .models import *
 from django.http.response import JsonResponse
 from django.contrib import auth
+from django.views.decorators.csrf import csrf_exempt
+
 # Create your views here.
 
 
+@csrf_exempt
 def join(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -17,6 +20,7 @@ def join(request):
         return JsonResponse({"status": "SUCCESS", "message": "성공적으로 가입되었습니다."})
 
 
+@csrf_exempt
 def login(request):
     if not request.user.is_authenticated:
         if request.method == "POST":

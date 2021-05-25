@@ -2,9 +2,11 @@ from django.http.response import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from .models import *
 from urllib.parse import urlparse
-#from parsers import *
+from zzim.parsers.parser import itemUrlParser
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
+
 
 def listItem(req):
     user = req.user
@@ -29,6 +31,7 @@ def viewItem(req, id):
     return JsonResponse({"status": "FAILED", "message": "사용자 정보가 일치하지 않습니다."}, status=403)
 
 
+@csrf_exempt
 def editItem(req, id):
     item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user:
@@ -61,26 +64,30 @@ def deleteItem(req, id):
     return JsonResponse({'status': 'FAILED'}, status=403)
 
 
+@csrf_exempt
 def addItem(req):
     if req.method == "POST":
         url = req.POST['url']
         parsed_url = urlparse(url)
         domain = parsed_url.netloc
-        if "gmarket" in domain:
-            item_object = gmarket.parser(url)
-#        elif "11st" in domain:
-#            item_object = 11st.parser(url)
-        elif "naver" in domain:
-            item_object = naver.parser(url)
-        elif "auction" in domain:
-            item_object = auction.parser(url)
-        else:
-            return JsonResponse({'status': 'FAILED', 'message': '현재 지원하지 않는 쇼핑몰입니다.'}, status=400)
+        supported_list = ['gmarket', '11st', 'auction', 'naver']
+        for i in supported_list:
+            if i in domain:
+                print(i)
+                try:
+                    item_object = itemUrlParser(url)
+                    item_object.user = req.user
+                    item_object.save()
+                    return JsonResponse({'status': "SUCCESS", 'message': "아이템이 정상적으로 저장되었습니다.", 'id': item_object.uuid})
+                except:
+                    return JsonResponse(
+                        {'status': "FAILED", 'message': "현재 지원하지 않는 쇼핑몰이거나 저장중 오류가 발생하였습니다."},
+                        status=400)
+    return JsonResponse({'status': 'FAILED', 'message': '잘못된 요청입니다.'}, status=400)
 
 
 def viewOtherUserItem(req, id):
     user = get_object_or_404(User, username=id)
-    print('#')
     if user.is_public:
         items = user.item_set.all()
         item_list = []

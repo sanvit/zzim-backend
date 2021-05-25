@@ -37,3 +37,4 @@ def parser(url):
     new_item.url = url
     new_item.image_url = image_url
     new_item.save()
+    return new_item

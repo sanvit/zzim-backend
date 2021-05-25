@@ -21,8 +21,6 @@ import user.views as user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user', zzim.listItem),
-    path('user/<str:id>', zzim.viewOtherUserItem),
     path('item/<uuid:id>', zzim.viewItem),
     path('item/<uuid:id>/edit', zzim.editItem),
     path('item/<uuid:id>/purchased', zzim.setPurchasedItem),
@@ -31,4 +29,6 @@ urlpatterns = [
     path('user/signup', user.join),
     path('user/signin', user.login),
     path('user/signout', user.logout),
+    path('user', zzim.listItem),
+    path('user/<str:id>', zzim.viewOtherUserItem),
 ]

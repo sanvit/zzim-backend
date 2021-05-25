@@ -11,8 +11,9 @@ def parser(url):
     name = soup.find('h3', {'class': '_3oDjSvLwq9 _copyable'}).text
     new_item.name = name
     price = soup.find_all('span', {'class': '_1LY7DqCnwR'})
-    price_str = price[0].text
-    if (price[1] != None):
+    if (len(price)==1):
+        price_str = price[0].text
+    else:
         price_str = price[1].text
     new_item.price = int(price_str.replace(",", ""))
 

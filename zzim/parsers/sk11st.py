@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from zzim.models import item, shoppingMall
 
+
 def parser(url):
     #   prdNo = ""
     # if parse_qs(urlparse(url).query).get('prdNo'):
@@ -14,7 +15,7 @@ def parser(url):
     request = requests.get(url)
     soup = BeautifulSoup(request.text, 'html.parser')
     name = soup.find('h1', {'class': 'title'}).text
-    price_str = soup.find('dl',{'class':'price'}).find('span', {'class': 'value'}).text
+    price_str = soup.find('dl', {'class': 'price'}).find('span', {'class': 'value'}).text
     price = ""
     for c in price_str:
         if c.isdigit():
@@ -36,5 +37,13 @@ def parser(url):
     image_url = soup.find('meta', {'property': 'og:image'}).get('content')
 
     # 모델에 저장
-  
-    return 
+
+    new_item = item()
+    new_item.name = name
+    new_item.price = price
+    new_item.shipping = shipping
+    new_item.mall = shoppingMall.objects.get(slug='11st')
+    new_item.url = url
+    new_item.image_url = image_url
+    new_item.save()
+    return new_item

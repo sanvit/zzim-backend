@@ -19,10 +19,11 @@ def parser(url):
 
     is_moobae = soup.find('span', {'class': 'Y-_Vd4O6dS'}).text
     if(is_moobae == "무료배송"):
-        shipping = 0
+        new_item.shipping = 0
+
     else:
         shipping = soup.find('span', {'class': 'Y-_Vd4O6dS'}).find('span', '_1_wrVRMvuL').text
-    new_item.shipping = shipping.replace(",", "")
+        new_item.shipping = shipping.replace(",", "")
 
     new_item.mall = shoppingMall.objects.get(slug='naver')
 

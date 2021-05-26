@@ -38,7 +38,7 @@ def editItem(req, id):
         if req.method == 'POST':
             item_object.name = req.POST['name']
             item_object.price = req.POST['price']
-            item_object.shipping = req.post['shipping']
+            item_object.shipping = req.POST['shipping']
             item_object.save()
             return JsonResponse({"status": "SUCCESS", "message": "성공적으로 수정되었습니다."})
         return JsonResponse({'image': item_object.image_url, 'name': item_object.name, 'price': item_object.price,
@@ -50,7 +50,7 @@ def editItem(req, id):
 def setPurchasedItem(req, id):
     item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user:
-        item_object.is_purchased == True
+        item_object.is_purchased = True
         item_object.save()
         return JsonResponse({'status': 'SUCCESS'})
     return JsonResponse({'status': 'FAILED'}, status=403)

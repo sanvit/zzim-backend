@@ -17,7 +17,7 @@ def join(request):
         user = User.objects.create_user(username, password, nickname)
         user.save()
         auth.login(request, user)
-        return JsonResponse({"status": "SUCCESS", "message": "성공적으로 가입되었습니다."})
+        return JsonResponse({"status": "SUCCESS", "message": "성공적으로 가입되었습니다.", "data": {"username": username, "nickname": nickname}})
 
 
 @csrf_exempt
@@ -29,8 +29,10 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user is not None:
                 auth.login(request, user)
-                return JsonResponse({"status": "SUCCESS", "message": "성공적으로 로그인되었습니다."})
+                return JsonResponse({"status": "SUCCESS", "message": "성공적으로 로그인되었습니다.", "data": { "username": username }})
         return JsonResponse({"status": "FAILED", "message": "사용자 정보가 일치하지 않습니다."}, status=403)
+    
+    return JsonResponse({"status": "WARNING", "message": "이미 로그인되어 있습니다."})
 
 
 def logout(request):

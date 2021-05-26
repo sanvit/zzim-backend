@@ -8,3 +8,4 @@ soupsieve==2.2.1
 sqlparse==0.4.1
 uWSGI==2.0.19.1
 requests==2.25.1
+whitenoise==5.2.0

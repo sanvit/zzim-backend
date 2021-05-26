@@ -41,7 +41,7 @@ def editItem(req, id):
         if req.method == 'POST':
             item_object.name = req.POST['name']
             item_object.price = req.POST['price']
-            item_object.shipping = req.post['shipping']
+            item_object.shipping = req.POST['shipping']
             item_object.save()
             return JsonResponse({"status": "SUCCESS", "message": "성공적으로 수정되었습니다."},
                                 json_dumps_params={'ensure_ascii': False})
@@ -57,7 +57,7 @@ def editItem(req, id):
 def setPurchasedItem(req, id):
     item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user:
-        item_object.is_purchased == True
+        item_object.is_purchased = True
         item_object.save()
         return JsonResponse({'status': 'SUCCESS'})
     return JsonResponse({'status': 'FAILED'}, status=403)
@@ -101,18 +101,15 @@ def addItem(req):
 
 def viewOtherUserItem(req, id):
     user = get_object_or_404(User, username=id)
-    if user.is_public:
-        items = user.item_set.all()
-        item_list = []
-        for i in items:
-            item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
-                         'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
-                         'createdDate': i.date_added, 'url': i.url}
-            item_list.append(item_json)
-        return JsonResponse(
-            {"status": "SUCCESS", "nickname": user.nickname, "data": item_list},
-            json_dumps_params={'ensure_ascii': False})
+    # if user.is_public:
+    items = user.item_set.all()
+    item_list = []
+    for i in items:
+        item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
+                        'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
+                        'createdDate': i.date_added, 'url': i.url}
+        item_list.append(item_json)
     return JsonResponse(
-        {"status": "FAILED", "message": "비공개 프로필입니다."},
-        json_dumps_params={'ensure_ascii': False},
-        status=403)
+        {"status": "SUCCESS", "nickname": user.nickname, "data": item_list},
+        json_dumps_params={'ensure_ascii': False})
+    # return JsonResponse({"status": "FAILED", "message": "비공개 프로필입니다."}, status=403)

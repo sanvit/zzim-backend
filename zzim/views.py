@@ -50,7 +50,7 @@ def editItem(req, id):
 def setPurchasedItem(req, id):
     item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user:
-        item_object.is_purchased == True
+        item_object.is_purchased = True
         item_object.save()
         return JsonResponse({'status': 'SUCCESS'})
     return JsonResponse({'status': 'FAILED'}, status=403)

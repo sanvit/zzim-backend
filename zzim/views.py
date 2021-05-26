@@ -53,7 +53,7 @@ def editItem(req, id):
         json_dumps_params={'ensure_ascii': False},
         status=403)
 
-
+@csrf_exempt
 def setPurchasedItem(req, id):
     item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user:
@@ -62,7 +62,7 @@ def setPurchasedItem(req, id):
         return JsonResponse({'status': 'SUCCESS'})
     return JsonResponse({'status': 'FAILED'}, status=403)
 
-
+@csrf_exempt
 def deleteItem(req, id):
     item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user:

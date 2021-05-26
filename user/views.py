@@ -38,7 +38,7 @@ def login(request):
     
     return JsonResponse({"status": "WARNING", "message": "이미 로그인되어 있습니다."}, json_dumps_params={'ensure_ascii': False})
 
-
+@csrf_exempt
 def logout(request):
     auth.logout(request)
     return JsonResponse({"status": "SUCCESS", "message": "성공적으로 로그아웃되었습니다."}, json_dumps_params={'ensure_ascii': False})

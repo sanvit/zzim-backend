@@ -88,13 +88,13 @@ def addItem(req):
 
 def viewOtherUserItem(req, id):
     user = get_object_or_404(User, username=id)
-    if user.is_public:
-        items = user.item_set.all()
-        item_list = []
-        for i in items:
-            item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
-                         'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
-                         'createdDate': i.date_added, 'url': i.url}
-            item_list.append(item_json)
-        return JsonResponse({"status": "SUCCESS", "nickname": user.nickname, "data": item_list})
-    return JsonResponse({"status": "FAILED", "message": "비공개 프로필입니다."}, status=403)
+    # if user.is_public:
+    items = user.item_set.all()
+    item_list = []
+    for i in items:
+        item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
+                        'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
+                        'createdDate': i.date_added, 'url': i.url}
+        item_list.append(item_json)
+    return JsonResponse({"status": "SUCCESS", "nickname": user.nickname, "data": item_list})
+    # return JsonResponse({"status": "FAILED", "message": "비공개 프로필입니다."}, status=403)

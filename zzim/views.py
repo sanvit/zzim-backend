@@ -6,14 +6,15 @@ from zzim.parsers.parser import itemUrlParser
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
-
+CDN_URL = "https://zzim-image-proxy.gumlet.io/"
 
 def listItem(req):
     user = req.user
     items = user.item_set.all().order_by('-date_added')
     item_list = []
     for i in items:
-        item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
+
+        item_json = {'id': i.uuid, 'image': CDN_URL + i.image_url, 'name': i.name, 'price': i.price,
                      'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
                      'createdDate': i.date_added, 'url': i.url, 'purchased': i.is_purchased}
         item_list.append(item_json)
@@ -24,7 +25,7 @@ def viewItem(req, id):
     item_object = get_object_or_404(item, pk=id)
     if req.user == item_object.user or item_object.user.is_public:
         return JsonResponse(
-            {'image': item_object.image_url, 'name': item_object.name, 'price': item_object.price,
+            {'image': CDN_URL + item_object.image_url, 'name': item_object.name, 'price': item_object.price,
              'shippingPrice': item_object.shipping, 'shoppingMallName': item_object.mall.name,
              'logoImage': item_object.mall.logo, 'createdDate': item_object.date_added, 'url': item_object.url,
              'purchased': item_object.is_purchased})
@@ -45,7 +46,7 @@ def editItem(req, id):
             item_object.save()
             return JsonResponse({"status": "SUCCESS", "message": "성공적으로 수정되었습니다."},
                                 json_dumps_params={'ensure_ascii': False})
-        return JsonResponse({'image': item_object.image_url, 'name': item_object.name, 'price': item_object.price,
+        return JsonResponse({'image': CDN_URL + item_object.image_url, 'name': item_object.name, 'price': item_object.price,
                              'shippingPrice': item_object.shipping, 'logoImage': item_object.mall.logo,
                              'createdDate': item_object.date_added, 'url': item_object.url})
     return JsonResponse(
@@ -105,7 +106,7 @@ def viewOtherUserItem(req, id):
     items = user.item_set.all().order_by('-date_added')
     item_list = []
     for i in items:
-        item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
+        item_json = {'id': i.uuid, 'image': CDN_URL + i.image_url, 'name': i.name, 'price': i.price,
                         'shippingPrice': i.shipping, 'shoppingMallName': i.mall.name, 'logoImage': i.mall.logo,
                         'createdDate': i.date_added, 'url': i.url}
         item_list.append(item_json)

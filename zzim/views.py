@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 def listItem(req):
     user = req.user
-    items = user.item_set.all()
+    items = user.item_set.all().order_by('-date_added')
     item_list = []
     for i in items:
         item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,
@@ -102,7 +102,7 @@ def addItem(req):
 def viewOtherUserItem(req, id):
     user = get_object_or_404(User, username=id)
     # if user.is_public:
-    items = user.item_set.all()
+    items = user.item_set.all().order_by('-date_added')
     item_list = []
     for i in items:
         item_json = {'id': i.uuid, 'image': i.image_url, 'name': i.name, 'price': i.price,

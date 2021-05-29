@@ -27,6 +27,8 @@ def parser(url):
     if(shipping_str==None):
         shipping_str = soup.find('div',{'class':'delivery_abroad'})
     shipping_str = shipping_str.find('strong').text
+    if "개당" in shipping_str:
+        shipping_str = shipping_str.split("개당")[1]
     shipping = ""
     for c in shipping_str:
         if c.isdigit():

@@ -5,13 +5,12 @@ from zzim.models import item, shoppingMall
 
 
 def parser(url):
-    #   prdNo = ""
-    # if parse_qs(urlparse(url).query).get('prdNo'):
-    #     prdNo = parse_qs(urlparse(url).query).get('prdNo')
-    # elif parse_qs(urlparse(url).query).get('prdNo'):
-    #     prdNo = parse_qs(urlparse(url).query).get('prdNo')
-    # else:
-    #     prdNo = parse_qs(urlparse(url)).get('prdNo')
+    prdNo = ""
+    if "prdNo"in url:
+        prdNo = url.split('=')[1]
+        if '&' in prdNo:
+            prdNo = prdNo.split('&')[0]
+        url = "http://www.11st.co.kr/products/"+prdNo
     request = requests.get(url)
     soup = BeautifulSoup(request.text, 'html.parser')
     name = soup.find('h1', {'class': 'title'}).text
@@ -26,8 +25,8 @@ def parser(url):
         price = int(price)
     shipping_str = soup.find('div',{'class':'delivery'})
     if(shipping_str==None):
-      shipping_str = soup.find('div',{'class':'delivery_abroad'})
-    shipping_str = shipping_str.find('dt').text
+        shipping_str = soup.find('div',{'class':'delivery_abroad'})
+    shipping_str = shipping_str.find('strong').text
     shipping = ""
     for c in shipping_str:
         if c.isdigit():
@@ -38,6 +37,7 @@ def parser(url):
         shipping = int(shipping)
 
     image_url = soup.find('meta', {'property': 'og:image'}).get('content')
+    name = name.strip()
 
     # 모델에 저장
     new_item = item()
